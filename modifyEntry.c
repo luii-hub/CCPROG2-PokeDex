@@ -9,18 +9,16 @@ struct details{
     char description50[51];
 };
 
-void modifyEntry(struct details entry[])
+void modifyEntry(struct details entry[], int *storedEntries)
 {
     int index, i;
-    int storedEntries;
 
-    // count number of stored entries (?)
     // call displayAllEntries()
 
     printf("Index of entry to be modified: ");
     scanf("%d", &index);
 
-    for(i = 0; i < storedEntries; i++)
+    for(i = 0; i < *storedEntries; i++)
     {
         if(i == index - 1)
         {
@@ -40,8 +38,9 @@ void modifyEntry(struct details entry[])
 
 int main()
 {
+    int *storedEntries; // ?
     struct details entry[MAX];
-    modifyEntry(entry);
+    modifyEntry(entry, storedEntries);
 
     return 0;
 }
