@@ -44,7 +44,10 @@ void addEntry(struct details entry[], int* storedEntries)
                 }
             }
             if(duplicateEntry <= 0){
+                duplicateEntry = 0;
+                printf("Entry Index[%d] String temp20 to Name20: %s\n", i, temp20);
                 strcpy(entry[i].name20, temp20);
+                printf("Entry Index[%d] in Function after Copying: %s\n\n", i, entry[i].name20);
                 //Validate Character Count for Type & Description
                 do{
                     printf("Pokemon Type: ");
@@ -63,10 +66,14 @@ void addEntry(struct details entry[], int* storedEntries)
                     
                 addedEntries++;
             }
+            else{
+                i--;
+            }
             /*  For Checking
                 printf("Count: %d\n", count);
                 printf("Index: %d\nName: %s\nType: %s\nDesc:%s\n\n", i, entry[i].name20, entry[i].type20, entry[i].description50);
             */
+            duplicateEntry = 0;
         }
     }
     else
@@ -77,28 +84,31 @@ void addEntry(struct details entry[], int* storedEntries)
     *storedEntries += addedEntries;
 }
 
+//For Testing
+void printEntries(struct details entry[], int storedEntries){
+    for(int i = 0; i < storedEntries; i++){
+        printf("\nEntry Index%d:\nPokemon Name:%s\nPokemon Type:%s\nDescription:%s\n\n", i, entry[i].name20, entry[i].type20, entry[i].description50);
+    }
+}
+
 int main()
 {
     struct details entry[MAX];
     int storedEntries = 0;
-
-    addEntry(entry, &storedEntries);
-    /*For Checking 
-    for(int i = 0; i < storedEntries; i++){
-        printf("Entry %d:\nPokemon Name:%s\nPokemon Type:%s\nDescription:%s\n\n", i+1, entry[i].name20, entry[i].type20, entry[i].description50);
-    }
-
-    addEntry(entry, &storedEntries);
-    for(int i = 0; i < storedEntries; i++){
-        printf("Entry %d:\nPokemon Name:%s\nPokemon Type:%s\nDescription:%s\n\n", i+1, entry[i].name20, entry[i].type20, entry[i].description50);
-    }
-
-    addEntry(entry, &storedEntries);
-    for(int i = 0; i < storedEntries; i++){
-        printf("Entry %d:\nPokemon Name:%s\nPokemon Type:%s\nDescription:%s\n\n", i+1, entry[i].name20, entry[i].type20, entry[i].description50);
-    }
-    */
+    // For Testing
+    int alis;
+    do{
+        printf("[1] AddEntry\n[2] PrintEntries\n[3] Exit\n");
+        scanf("%d", &alis);
+        if(alis == 1){
+            addEntry(entry, &storedEntries);
+        }
+        else if(alis == 2){
+            printEntries(entry, storedEntries);
+        }
+        else{
+           return 0; 
+        }
+    }while(alis != '3');
     
-
-    return 0;
 }
