@@ -377,10 +377,12 @@ void addEntry(struct details entry[], int* storedEntries){
                 duplicateEntry = 0;
                 /*For Checking (Delete once MP Finish)
                 printf("Entry Index[%d] String temp20 to Name20: %s\n", i, temp20);
-                strcpy(entry[i].name20, temp20);
+                
                 printf("Entry Index[%d] in Function after Copying: %s\n\n", i, entry[i].name20);
                 */
                 //Validate Character Count for Type & Description
+		    strcpy(entry[i].name20, temp20);
+		    
                 do{
                     printf("Pokemon Type: ");
                     scanf("%s", entry[i].type20);
@@ -434,7 +436,7 @@ void displayAllEntries(struct details entry[], int *storedEntries){
     int i;
     printf("Pokemon Entries:\n");
     for(i = 0; i < *storedEntries; i++){
-        printf("\nEntry Index%d:\nPokemon Name:%s\nPokemon Type:%s\nDescription:%s\n\n", i, entry[i].name20, entry[i].type20, entry[i].description50);
+        printf("\nEntry Index: %d\nPokemon Name: %s\nPokemon Type: %s\nDescription: %s\n\n", (i+1), entry[i].name20, entry[i].type20, entry[i].description50);
     }
 }
 
