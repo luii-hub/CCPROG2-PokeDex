@@ -16,7 +16,7 @@ void searchByName(struct details entry[], int storedEntries)
     int len; 
     int ctr = 0;
 
-    printf("Search: ");
+    printf("Search Name: ");
     // getchar();    gets(substring);
     scanf("%s", substring);
     len = strlen(substring);
