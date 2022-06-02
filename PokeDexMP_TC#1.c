@@ -3,7 +3,11 @@
 /*  Things to Change after  100% Finish of MP
     - While Loops when asking for character but int will infinite loop
     - SearchByType as a Multiple Choice 
-
+    
+    Unknown if Bug or Feature:
+    - AddEntry should be case insensitive (e.g. Pikachu and pikachu should be the same)
+    - SearchByName should be case insensitive (e.g. Bella, scholarBELLA, bEllAbigbrain ; keyword "Bella"
+    
     Minor Bugs:
     - Manage Data Input Validation (int = yes but char = no)
     - AddEntry Data Input Validation (int = yes but char = no)
