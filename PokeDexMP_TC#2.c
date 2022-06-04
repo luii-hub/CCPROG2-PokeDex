@@ -3,31 +3,28 @@
 /*  Things to Change after  100% Finish of MP
     - While Loops when asking for character but int will infinite loop
     - SearchByType as a Multiple Choice 
-    - addEntry of pokemon type as Multiple Choice
-    
+    - Additional Features that make sense(tbd)
+
     Unknown if Bug or Feature:
     - AddEntry should be case insensitive (e.g. Pikachu and pikachu should be the same)
     - SearchByName should be case insensitive (e.g. Bella, scholarBELLA, bEllAbigbrain ; keyword "Bella"
+    - Modify Entry if it also modifies tasks
+    - Does Import/Export also exists in Research Tasks since it only affects the Pokemon Entry
     
     Minor Bugs:
-    - Manage Data Input Validation (int = yes but char = no)
+    - Manage Data Input Validation (int = yes but char = no) (Fixed 6-4-2022)
     - AddEntry Data Input Validation (int = yes but char = no)
     - Modify Data input Validation (int = yes but char = no)
     - Delete Entry input Validation (int = yes but char = no)
-    - Research Task input Validation (int = yes but char = no)
+    - Research Task input Validation (int = yes but char = no) (Fixed 6-4-2022)
     - Update Research Task input Validation (int = yes but char = no)
     - Review Task per Pokemon input Validation (int = yes but char = no)
     - Review Task per Type input Validation (int = yes but char = no)
 
-    New bugs:
-    - Manage data loops n times when user inputs multiple (n) characters
-    - Return Menu not working *fixed*
-    - RRT per task type loop printf of "no entries found" based on number of stored entries
-
     Done:
     - Main Menu (Good)
 
-    - Manage Data (2 Minor Bugs)
+    - Manage Data (1 Minor Bug)
     - Add Entry (1 Minor Bug, Unknown)
     - Modify Entry (1 Minor Bug)
     - Delete Entry (1 Minor Bug)
@@ -38,7 +35,7 @@
     - Research Task (1 Minor Bug)
     - Update Research Task (1 Minor Bug)
     - Review Task per Pokemon (1 Minor Bug)
-    - Review Task per Type (2 Minor Bugs)
+    - Rewview Task per Type (1 Minor Bug)
 
     Unfinished:
     - Import Data
@@ -151,7 +148,7 @@ void manageData(struct details entry[], int* storedEntries)
 {
     system("cls");
     int i;
-    char nChoice;
+    char cChoice;
 
     /* Stay at Manage Data Menu until User exits to Main Menu (9) */
     do{ /* Manage Data Menu */
@@ -160,14 +157,14 @@ void manageData(struct details entry[], int* storedEntries)
         printf("[2] Modify Entry    [5] Search Pokemon Name     [8] Export Data\n");
         printf("[3] Delete Entry    [6] Search Pokemon Type     [9] Return Menu\n\n");
         printf("Console: ");
-        scanf(" %c", &nChoice); printf("\n");
-        while(nChoice != '1' && nChoice != '2' && nChoice != '3' && nChoice != '4' && nChoice != '5' && nChoice != '6' && nChoice != '7' && nChoice != '8' && nChoice != '9')
+        scanf(" %c", &cChoice); printf("\n");
+        while(cChoice != '1' && cChoice != '2' && cChoice != '3' && cChoice != '4' && cChoice != '5' && cChoice != '6' && cChoice != '7' && cChoice != '8' && cChoice != '9')
         {
             printf("Invalid input. Please try again.\n");
             printf("Console: ");
-            scanf(" %c", &nChoice); printf("\n");
+            scanf(" %c", &cChoice); printf("\n");
         }
-        switch(nChoice){
+        switch(cChoice){
             case '1': //Add Entry
                     addEntry(entry, storedEntries); KeyContinue();
                     break;
@@ -196,7 +193,7 @@ void manageData(struct details entry[], int* storedEntries)
                     system("cls");
                     break;    
         }
-    }while(nChoice != '9');
+    }while(cChoice != '9');
 }
 
 /*  researchTasks Function contains all the options for updating and accesing research tasks
@@ -206,38 +203,38 @@ void manageData(struct details entry[], int* storedEntries)
 void researchTasks(struct details entry[], int* storedEntries)
 {   
     system("cls");
-    int nChoice;
+    char cChoice;
 
     /* Stay at Research Tasks Menu until user exits to Main Menu */
     do{ /*Research Tasks Menu */
         printf("\n------------------- RESEARCH TASKS -------------------\n\n");
         printf("[1] Update Research Tasks\n[2] Review Research Task per Pokemon\n[3] Review Research Task per Task Type\n[4] Exit\n\n");
         printf("Console: ");
-        scanf("%d", &nChoice); printf("\n");
-        while(nChoice < 1 || nChoice > 4)
+        scanf(" %c", &cChoice); printf("\n");
+        while(cChoice != '1' && cChoice != '2' && cChoice != '3' && cChoice != '4')
         {
             printf("Invalid input. Please try again.\n");
             printf("Console: ");
-            scanf("%d", &nChoice);
+            scanf(" %c", &cChoice);
         }
-        switch(nChoice)
+        switch(cChoice)
         {
-            case 1: /* Update Research Task */
+            case '1': /* Update Research Task */
                     updateTask(entry, storedEntries);
                     KeyContinue();
                     break;
-            case 2: /* Review Research Task Per Pokemon */
+            case '2': /* Review Research Task Per Pokemon */
                     reviewTaskPkmn(entry, storedEntries);
                     KeyContinue();
                     break;
-            case 3: /* Review Research Task Per Pkmn Type */
+            case '3': /* Review Research Task Per Pkmn Type */
                     reviewTaskType(entry, storedEntries);
                     KeyContinue();
-            case 4: /* Return to Main Menu */
+            case '4': /* Return to Main Menu */
                     system("cls");
                     break;
         }
-    }while(nChoice != 4);
+    }while(cChoice != '4');
 }
 
 /*  addEntry Function lets the user add a Pokemon Entry N number of times depending on the user-input
@@ -337,7 +334,7 @@ void modifyEntry(struct details entry[], int* storedEntries){
         //Ask User Inputs
         while(modifyIndex <= 0 || modifyIndex > *storedEntries){
             printf("Which Entry would you wish modify: ");
-            scanf("%d", &modifyIndex); printf("\n");
+            scanf(" %d", &modifyIndex); printf("\n");
         }
         modifyIndex--;
         do{
@@ -426,7 +423,7 @@ void displayAllEntries(struct details entry[], int* storedEntries){
         printf("No Existing Entries Found!\n");
     }else{
         printf("Number of Pokemon Entries: %d\n", *storedEntries);
-        printf("Number of Pokemon Left: %d\n\n", 150 - *storedEntries);
+        printf("Number of Pokemon Left: %d\n", 150 - *storedEntries);
         for(i = 0; i < *storedEntries; i++){
             printf("Entry Index: %d\nPokemon Name: %s\nPokemon Type: %s\nDescription: %s\n\n", (i+1), entry[i].name20, entry[i].type20, entry[i].description50);
         }
@@ -637,16 +634,17 @@ void reviewTaskType(struct details entry[], int *storedEntries)
 
         if(task == 1){
             
-            printf("Pokemon - Seen\n");
-            for(i = 0; i < *storedEntries; i++){
-                if(entry[i].seen != 0){
-                    printf("%s - %d\n", entry[i].name20, entry[i].seen);
-                    found = 1;
+                printf("Pokemon - Seen\n");
+                for(i = 0; i < *storedEntries; i++){
+                    if(entry[i].seen != 0){
+                        printf("%s - %d\n", entry[i].name20, entry[i].seen);
+                        found = 1;
+                    }
+                    else if(i == *storedEntries - 1 && found != 1){
+                        //printf("J: %i and found: %d\n", i, found);
+                        printf("No Entries found\n");
+                    }
                 }
-                else if(found != 1){
-                    printf("No Entries found\n");
-                }
-            }
         }
         else if(task == 2){
             printf("Pokemon - Defeated\n");
@@ -655,7 +653,8 @@ void reviewTaskType(struct details entry[], int *storedEntries)
                     printf("%s - %d\n", entry[j].name20, entry[j].defeated);
                     found = 1;
                 }
-                else if(found != 1){
+                else if(j == *storedEntries - 1 && found != 1){
+                    //printf("J: %d and found: %d\n", j, found);
                     printf("No Entries found\n");
                 }
             }
