@@ -190,10 +190,10 @@ void manageData(struct details entry[], int* storedEntries)
                     searchByType(entry, storedEntries); KeyContinue();
                     break;
             case '7': //Import data  from a .txt file to the Pokedex
-                    //importData();
+                    importFile(entry, storedEntries); KeyContinue();
                     break;
             case '8': //Export data as a .txt file
-                    //exportData();
+                    exportFile(entry, storedEntries); KeyContinue();
                     break;    
             case '9': //Return to Main Menu
                     system("cls");
@@ -530,21 +530,136 @@ void searchByType(struct details entry[], int *storedEntries)
 }
 
 /*  importFile Function lets the user import Data as existing data into the PokeDex
-        @param     
-        @param
+        @param entry[] - a data structure that contains all data of each Pokemon Entry       
+        @param storedEntries - pointer that points to the address of the # of entries stored
 */
-void importFile()
+void importFile(struct details entry[], int *storedEntries)
 {
+    int numEntries;
+    char tempName[21], tempType[21], tempDesc[51], tempSpace;
+    int i;
+    char cInput;
+    int duplicateEntry;
+
     printf("\nImport File Externally\n\n");
+
+    FILE *fp;
+    char filename[31];
+
+    printf("Enter the name or location of the file to be imported: ");
+    scanf("%s", filename);
+
+    fp = fopen(filename, "r");
+
+    if(fp == NULL)
+    {
+        printf("ERROR: Filename does not exist.\n");
+    }
+    else
+    {
+        printf("File opened successfully!\n");
+
+        // fscanf(fp, "%d", &numEntries);
+        // printf("%d\n", numEntries);
+
+        while(!feof(fp))
+        {
+            duplicateEntry = 0;
+            // fscanf(fp, "%s %s %s", tempName, tempType, tempDesc);
+            // fscanf(fp, "%s %s", tempName, tempType);
+            // fscanf(fp, "%[^\n]", tempName);
+            // fscanf(fp, "%[^\n]", tempType);
+            // fscanf(fp, "%[^\n]", tempDesc);
+
+            // if(fgets(tempName, 21, fp) != NULL)?
+            // {
+
+                fgets(tempName, 21, (FILE*)fp);
+                fgets(tempType, 21, (FILE*)fp);
+                fgets(tempDesc, 51, (FILE*)fp);
+                fscanf(fp, " %c", tempSpace);
+
+                for(i = 0; i <= *storedEntries; i++)
+                {   // duplicate entry
+                    if(strcmp(entry[i].name20,tempName) == 0)
+                    {
+                        duplicateEntry++;
+                    }
+                }
+                
+                if(duplicateEntry == 0)
+                {
+                    printf("Name: %s\nType: %s\nDescription: %s\n\n", tempName, tempType, tempDesc);
+                    printf("Add to the list of entries?\n[Y]es\n[N]o\n");
+                    scanf(" %c", &cInput);
+                    cInput = tolower(cInput);
+
+                    while(cInput != 'y' && cInput != 'n') // adding to the main array
+                    {
+                        printf("Invalid input. Please try again.\n");
+                        scanf(" %c", &cInput);
+                        cInput = tolower(cInput);
+                    }
+
+                    if(cInput == 'y')
+                    {
+                        strcpy(entry[*storedEntries].name20, tempName);
+                        strcpy(entry[*storedEntries].type20, tempType);
+                        strcpy(entry[*storedEntries].description50, tempDesc);
+
+                        printf("Pokemon Name: %s\nPokemon Type: %s\nDescription: %s\n\n", entry[*storedEntries].name20, entry[*storedEntries].type20, entry[*storedEntries].description50);
+                        *storedEntries += 1;
+                    }
+                }
+            // }
+        }
+
+        fclose(fp);
+    }
 }
 
 /*  exportFile Function lets the user exxport existing data as a .txt file
         @param     
         @param
 */
-void exportFile()
+void exportFile(struct details entry[], int *storedEntries)
 {
-    printf("\nExport File Internally\n\n");
+    char fileName[31];
+    FILE  *fp;
+    int i;
+
+    if(*storedEntries == 0)
+    {
+        printf("No existing entries found! Redirecting back to Manage Data...\n");
+    }
+    else
+    {
+        printf("\nExport File Internally\n\n");
+        printf("Enter the filename (excluding the extension): ");
+        scanf("%s", fileName);
+
+        while(strlen(fileName) > 26)
+        {
+            printf("You reached the character limit. Please try again:");
+            scanf("%s", fileName);
+        }
+
+        strcat(fileName, ".txt");
+        
+        printf("Opening file %s...\n", fileName);
+
+        fp = fopen(fileName, "w");
+
+        for(i = 0; i < *storedEntries; i++)
+        {
+            fprintf(fp, "Name: %s\nType: %s\nDescription: %s\n\n", entry[i].name20, entry[i].type20, entry[i].description50);
+        }
+
+        fclose(fp);
+
+        printf("File successfully exported!\n");
+
+    }
 }
 
 /*  updateTask Function lets the user update a specific research task of a Pokemon Entry
@@ -745,3 +860,4 @@ void pokemonRank(struct details entry[], int *storedEntries)
         }
     }
 }
+
