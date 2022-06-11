@@ -37,9 +37,11 @@
     - Review Task per Pokemon (1 Minor Bug)
     - Review Task per Type (1 Minor Bug)
     - Pokemon Ranking
-    Unfinished:
     - Import Data
     - Export Data
+
+    Notes:
+    - battlepass ko tnx ><
 */
 
 
@@ -557,22 +559,173 @@ void searchByType(struct details entry[], int *storedEntries)
 
 }
 
-/*  importFile Function lets the user import Data as existing data into the PokeDex
-        @param     
-        @param
+/*  deleteSubstring Function lets the user delete a substring from the file
+        @param string[] - the string imported from the text file
+        @param substr[] - the substring to be deleted from the given string
 */
-void importFile()
+void deleteSubstring(char string[], char substr[])
 {
-    printf("\nImport File Externally\n\n");
+    int i = 0;
+    int j;
+    int stringLength = strlen(string);
+    int subLength = strlen(substr);
+
+    while(i < stringLength)
+    {
+        if (strstr(&string[i], substr) == &string[i])
+        {
+            stringLength -= subLength;
+
+            for (j = i; j < stringLength; j++)
+            {
+                string[j] = string[j + subLength];
+            }
+        }
+        else
+        {
+            i++;
+        }
+    }
+
+    string[i] = '\0';
+
+}
+
+/*  importFile Function lets the user import Data as existing data into the PokeDex
+        @param entry[] - a data structure that contains all data of each Pokemon Entry       
+        @param storedEntries - pointer that points to the address of the # of entries stored
+*/
+void importFile(struct details entry[], int *storedEntries)
+{
+    int numEntries;
+    char tempName[21], tempType[21], tempDesc[51], tempSpace;
+    int entriesLeft = MAX - *storedEntries;
+    int i;
+    char cInput;
+    int duplicateEntry;
+
+    if(entriesLeft == 0)
+    {
+        printf("Error: You have reached the Maximum Entry Count!\n");
+    }
+    else
+    {
+        printf("\nImport File Externally\n\n");
+
+        FILE *fp;
+        char filename[31];
+
+        printf("Enter the name or location of the file to be imported: ");
+        scanf("%s", filename);
+
+        fp = fopen(filename, "r");
+
+        if(fp == NULL)
+        {
+            printf("ERROR: Filename does not exist.\n");
+        }
+        else
+        {
+            printf("File opened successfully!\n");
+
+            while(!feof(fp))
+            {
+                duplicateEntry = 0;
+                
+
+                fgets(tempName, 21, (FILE*)fp);
+                fgets(tempType, 21, (FILE*)fp);
+                fgets(tempDesc, 51, (FILE*)fp);
+                fscanf(fp, " %c", tempSpace);
+
+                deleteSubstring(tempName, "Name: ");
+                deleteSubstring(tempType, "Type: ");
+                deleteSubstring(tempDesc, "Description: ");
+
+                deleteSubstring(tempName, "\n");
+                deleteSubstring(tempType, "\n");
+                deleteSubstring(tempDesc, "\n");
+
+                for(i = 0; i <= *storedEntries; i++)
+                {   // duplicate entry
+                    if(strcmp(entry[i].name20,tempName) == 0)
+                    {
+                        duplicateEntry++;
+                    }
+                }
+                
+                if(duplicateEntry == 0)
+                {
+                    printf("Name: %s\nType: %s\nDescription: %s\n\n", tempName, tempType, tempDesc);
+                    printf("Add to the list of entries?\n[Y]es\n[N]o\n");
+                    scanf(" %c", &cInput);
+                    cInput = tolower(cInput);
+
+                    while(cInput != 'y' && cInput != 'n') // adding to the main array
+                    {
+                        printf("Invalid input. Please try again.\n");
+                        scanf(" %c", &cInput);
+                        cInput = tolower(cInput);
+                    }
+
+                    if(cInput == 'y')
+                    {
+                        strcpy(entry[*storedEntries].name20, tempName);
+                        strcpy(entry[*storedEntries].type20, tempType);
+                        strcpy(entry[*storedEntries].description50, tempDesc);
+
+                        *storedEntries += 1;
+                        entriesLeft -= 1;
+                    }
+                }
+            }
+            fclose(fp);
+        }
+    }
 }
 
 /*  exportFile Function lets the user exxport existing data as a .txt file
-        @param     
-        @param
+        @param entry[] - a data structure that contains all data of each Pokemon Entry       
+        @param storedEntries - pointer that points to the address of the # of entries stored
 */
-void exportFile()
+void exportFile(struct details entry[], int *storedEntries)
 {
-    printf("\nExport File Internally\n\n");
+    char fileName[31];
+    FILE  *fp;
+    int i;
+
+    if(*storedEntries == 0)
+    {
+        printf("No existing entries found! Redirecting back to Manage Data...\n");
+    }
+    else
+    {
+        printf("\nExport File Internally\n\n");
+        printf("Enter the filename (excluding the extension): ");
+        scanf("%s", fileName);
+
+        while(strlen(fileName) > 26)
+        {
+            printf("You reached the character limit. Please try again:");
+            scanf("%s", fileName);
+        }
+
+        strcat(fileName, ".txt");
+        
+        printf("Opening file %s...\n", fileName);
+
+        fp = fopen(fileName, "w");
+
+        for(i = 0; i < *storedEntries; i++)
+        {
+            fprintf(fp, "Name: %s\nType: %s\nDescription: %s\n\n", entry[i].name20, entry[i].type20, entry[i].description50);
+        }
+
+        fclose(fp);
+
+        printf("File successfully exported!\n");
+
+    }
 }
 
 /*  updateTask Function lets the user update a specific research task of a Pokemon Entry
@@ -791,14 +944,14 @@ void addResearchTask(struct details entry[], int *storedEntries, int *addOnCount
             printf("Note: You can only add up to five numerical Research Tasks\n");
             printf("Add-Ons Left: %d\n\n", (5 - *addOnCounter));
             printf("Do you wish to add an additional Research Task?\n[Y]es [N]o\n\nConsole: ");
-            scanf(" %[^\n]s", &cChoice);
+            scanf(" %c", &cChoice);
             cChoice = tolower(cChoice);
 
             while(cChoice != 'y' && cChoice != 'n')
             {
                 printf("\nInvalid input. Please try again.\n");
                 printf("Console: ");
-                scanf(" %[^\n]s", &cChoice);
+                scanf(" %c", &cChoice);
                 cChoice = tolower(cChoice);
             }
 
