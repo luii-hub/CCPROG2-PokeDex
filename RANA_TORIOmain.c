@@ -14,7 +14,7 @@ TORIO, Ysobella, DLSU ID# 12172030
 #include <conio.h> 
 #include <windows.h> 
 #include <unistd.h> 
-#include "PokeDex.h"
+#include "RANA_TORIOheader.h"
 
 /* --- Main Function --- */
 int main()
