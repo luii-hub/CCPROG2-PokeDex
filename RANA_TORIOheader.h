@@ -15,6 +15,7 @@ TORIO, Ysobella, DLSU ID# 12172030
 #include <windows.h> 
 #include <unistd.h> 
 
+/* Terminal Font-Colors and Background-Colors*/
 #define YELLOW "\033[0;33m"
 #define CYAN "\033[0;36m"
 #define GREEN "\033[0;32m"
@@ -30,13 +31,14 @@ TORIO, Ysobella, DLSU ID# 12172030
 /* Maximum Number of Entries */
 #define MAX 150
 
-/* Struct Data Type for Pokemon Entry */
+/* Struct Data Type for Additional Research Task */
 typedef struct AddOns
 {
     char researchDesc[21];
     int researchCount;
 } ExtraTasks;
 
+/* Struct data type for Pokemon Entry*/
 struct details
 {
     char name20[21];
@@ -143,7 +145,6 @@ void manageData(struct details entry[], int* storedEntries, int* addOnCounter)
     /* Stay at Manage Data Menu until User exits to Main Menu (9) */
     do
     {   /* Manage Data Menu */
-        /* printf("Stored Entries: %d\n",*storedEntries); printf("AddOnCOunt: %d\n",*addOnCounter); */ 
         printf( CYAN "\n------------------------ [MANAGE DATA] ------------------------\n\n" RESET);
         printf(YELLOW"[1]"RESET" Add Entry       "YELLOW"[4]"RESET" Display All Entries     "YELLOW"[7]"RESET" Import Data\n");
         printf(YELLOW"[2]"RESET" Modify Entry    "YELLOW"[5]"RESET" Search Pokemon Name     "YELLOW"[8]"RESET" Export Data\n");
@@ -208,7 +209,6 @@ void addEntry(struct details entry[], int* storedEntries)
     // Entry Checking, Ask user for Pokemon Name, Type, Description
     if(entriesLeft != 0)
     {
-
         printf("Input the number of entries you wish to add | Entries Left: " YELLOW "%d\n" RESET, entriesLeft);
         do
         {
@@ -271,7 +271,6 @@ void addEntry(struct details entry[], int* storedEntries)
                     scanf(" %[^\n]s", entry[i].description50);
                     if(strlen(entry[i].description50) > 50)
                     {
-                        // printf("Strlen: %d\n", strlen(entry[i].description50));
                         printf(RED "Error: Pokemon Description must not exceed 50 Characters\n" RESET);
                     }
                 }while(strlen(entry[i].description50) > 50);
@@ -279,7 +278,7 @@ void addEntry(struct details entry[], int* storedEntries)
             }
             else
             {
-                i--;
+                i--; //Decrement to Reprompt User Again if Duplicate is Found
             }
             duplicateEntry = 0;
         }
@@ -321,6 +320,7 @@ void modifyEntry(struct details entry[], int* storedEntries){
             scanf(" %d", &modifyIndex); printf("\n");
         }
         modifyIndex--;
+        
         do
         {
             printf("Which Category would you wish to modify:\n"CYAN"[1]"RESET" Pokemon Name\n"CYAN"[2]"RESET" Pokemon Type\n"CYAN"[3]"RESET" Pokemon Description\n\nConsole: ");
@@ -332,6 +332,7 @@ void modifyEntry(struct details entry[], int* storedEntries){
         {
             if(modifyIndex == i)
             {
+                /* Modify Pokemon Name */
                 if(category == 1)
                 {
                     do
@@ -345,6 +346,7 @@ void modifyEntry(struct details entry[], int* storedEntries){
                         }
                     }while(strlen(entry[i].name20) > 20);
                 }
+                /* Modify Pokemon Type */
                 else if(category == 2)
                 {
                     do
@@ -362,6 +364,7 @@ void modifyEntry(struct details entry[], int* storedEntries){
                         case 'E':  strcpy(entry[i].type20, "Electric"); break;
                     }
                 }
+                /* Modify Pokemon Description */
                 else if(category == 3)
                 {
                     do
@@ -507,9 +510,10 @@ void searchByName(struct details entry[], int *storedEntries)
 void searchByType(struct details entry[], int *storedEntries)
 {
     int i; // loop variable for position
-    char cType;
-    char PokemonType[21];
-    int found = 0;
+    char cType; // user input
+    char PokemonType[21]; 
+    int found = 0; // counter variable for found pokemon names in list
+    
     if(*storedEntries == 0)
     {
         printf(RED"No Existing Entries Found!\n"RESET);
@@ -530,7 +534,8 @@ void searchByType(struct details entry[], int *storedEntries)
             case 'G':  strcpy(PokemonType, "Grass"); break;
             case 'E':  strcpy(PokemonType, "Electric"); break;
         }
-        for(i = 0; i < *storedEntries; i++){
+        for(i = 0; i < *storedEntries; i++)
+        {
             if(strcmp(PokemonType, entry[i].type20) == 0)
             {
                 printf("Entry Index: " RED "%d\n" RESET "Pokemon Name: " CYAN "%s\n" RESET "Pokemon Type: " GREEN "%s\n" RESET "Description: " YELLOW "%s\n\n" RESET, (i+1), entry[i].name20, entry[i].type20, entry[i].description50);
@@ -615,7 +620,7 @@ void importFile(struct details entry[], int *storedEntries)
         {
             printf(YELLOW"File opened successfully!\n"RESET);
 
-            while(!feof(fp) || entriesLeft == 0) // while EOF is not reached or the maximum entry limit is reached
+            while(!feof(fp)) // while EOF is not reached or the maximum entry limit is reached
             {
                 duplicateEntry = 0;
                 
@@ -645,7 +650,7 @@ void importFile(struct details entry[], int *storedEntries)
                     }
                 }
                 
-                if(duplicateEntry == 0) // adding to the list of entries
+                if(duplicateEntry == 0 && entriesLeft > 0) // adding to the list of entries
                 {
                     printf("Name: %s\nType: %s\nDescription: %s\n\n", tempName, tempType, tempDesc);
                     printf("Add to the list of entries?\n["GREEN"Y"RESET"]es\n["RED"N"RESET"]o\n");
@@ -665,6 +670,7 @@ void importFile(struct details entry[], int *storedEntries)
                         strcpy(entry[*storedEntries].type20, tempType);
                         strcpy(entry[*storedEntries].description50, tempDesc);
 
+
                         *storedEntries += 1;
                         entriesLeft -= 1;
                     }
@@ -674,6 +680,11 @@ void importFile(struct details entry[], int *storedEntries)
             if(entryCtr == dupCtr)
             {
                 printf(GREEN"\nAll entries from the file are already present in the PokeDex.\n\n"RESET);
+            }
+
+            if(entriesLeft == 0)
+            {
+                printf("\nMaximum limit reached!\n");
             }
 
             fclose(fp); // close file
@@ -740,8 +751,6 @@ void researchTasks(struct details entry[], int* storedEntries, int* addOnCounter
     /* Stay at Research Tasks Menu until user exits to Main Menu */
     do
     { /*Research Tasks Menu */
-        // printf("Stored Entries: %d\n", *storedEntries);
-        // printf("AddOnCOunt: %d\n", *addOnCounter); DEBUGGING
         printf(CYAN "\n------------------- RESEARCH TASKS -------------------\n\n" RESET);
         printf(GREEN"[1]"RESET" Update Research Tasks\n"GREEN"[2]"RESET" Review Research Task per Pokemon\n"GREEN"[3]"RESET" Review Research Task per Task Type\n"GREEN"[4]"RESET" Pokemon Ranking\n\n");
         printf(YELLOW"Add-Ons:\n"GREEN"[5]"RESET" Add Additional Research Task\n"GREEN"[6]"RESET" Show Additional Research Task\n"GREEN"[7]"RESET" Update Research Task Add-On\n"GREEN"[8]"RESET" Show Research Task Add-on Per Pokemon\n"GREEN"[9]"RESET" Exit\n");
@@ -859,9 +868,6 @@ void updateTask(struct details entry[], int *storedEntries){
                 printf("\n");
                 entry[updatePokemon].defeated += addTask;
             }
-
-            //Debugger
-            // printf("Pokemon %s:\nSeen: %d\nDefeated: %d\n\n", entry[updatePokemon].name20, entry[updatePokemon].seen, entry[updatePokemon].defeated);
         }
     }   
 }
@@ -942,7 +948,6 @@ void reviewTaskType(struct details entry[], int *storedEntries)
                 }
                 else if(i == *storedEntries - 1 && found != 1)
                 {
-                    //printf("J: %i and found: %d\n", i, found);
                     printf(RED "No Entries found\n" RESET);
                 }
             }
@@ -959,7 +964,6 @@ void reviewTaskType(struct details entry[], int *storedEntries)
                 }
                 else if(j == *storedEntries - 1 && found != 1)
                 {
-                    //printf("J: %d and found: %d\n", j, found);
                     printf(RED "No Entries found\n" RESET);
                 }
             }
@@ -977,14 +981,14 @@ void reviewTaskType(struct details entry[], int *storedEntries)
 */
 void pokemonRank(struct details entry[], int *storedEntries)
 {
-    struct rank
+    struct rank // struct data type for ranking
     {
         int index;
         int total;
     } pokemon[MAX];
 
-    int maxRank = 5;
-    int i, j, max, tempTotal, tempIndex;        
+    int maxRank = 5; // number of entries to print
+    int i, j, max, tempTotal, tempIndex;   // variables for swapping and sorting     
     
     if(*storedEntries == 0)
     {
@@ -1052,7 +1056,6 @@ void addResearchTask(struct details entry[], int *storedEntries, int *addOnCount
 
     char cChoice;
     char modify20[21];
-    // /*For Debugging*/ printf("AddOns: %d\n", *addOnCounter);
 
     //Entry Validation
     if(*storedEntries == 0)
@@ -1093,7 +1096,6 @@ void addResearchTask(struct details entry[], int *storedEntries, int *addOnCount
                     scanf(" %[^\n]s", modify20); 
                     printf("\n");
                     strcpy(researchAddOns[*addOnCounter], modify20);
-                    printf("addoncounter: %d", *addOnCounter);
                     if(strlen(researchAddOns[*addOnCounter]) > 20)
                     {
                         printf(RED "Error: Pokemon Type must not exceed 20 Characters\n" RESET);
@@ -1101,9 +1103,7 @@ void addResearchTask(struct details entry[], int *storedEntries, int *addOnCount
                 }while(strlen(researchAddOns[*addOnCounter]) > 20);
 
                 printf(GREEN "Successfully added a Research Task\n" RESET);    
-                printf("RT: %s\n", researchAddOns[*addOnCounter]);
                 *addOnCounter += 1;
-                printf("AddOnCOunt: %d\n", *addOnCounter); 
             }
         }
     }
@@ -1198,9 +1198,14 @@ void updateAddOnsPerPkmn(struct details entry[], int *storedEntries, int* addOnC
                     else
                     {
                         updatePokemon--;
-                        printf("%s: ", researchAddOns[0]);
-                        scanf("%d", &addTask); 
-                        printf("\n");
+                        do{
+                            printf("%s: ", researchAddOns[0]);
+                            scanf("%d", &addTask); 
+                            printf("\n");
+                            if(addTask < 0){
+                                printf(RED "Error: Invalid Entry! Try Again\n" RESET);
+                            }
+                        }while(addTask < 0);
                         entry[updatePokemon].researchTasks[0].researchCount += addTask;
                     }
                     break;
@@ -1216,9 +1221,14 @@ void updateAddOnsPerPkmn(struct details entry[], int *storedEntries, int* addOnC
                     else
                     {
                         updatePokemon--;
-                        printf("%s: ", researchAddOns[1]);
-                        scanf("%d", &addTask); 
-                        printf("\n");
+                        do{
+                            printf("%s: ", researchAddOns[1]);
+                            scanf("%d", &addTask); 
+                            printf("\n");
+                            if(addTask < 0){
+                                printf(RED "Error: Invalid Entry! Try Again\n" RESET);
+                            }
+                        }while(addTask < 0);
                         entry[updatePokemon].researchTasks[1].researchCount += addTask;
                     }
                     break;
@@ -1234,8 +1244,14 @@ void updateAddOnsPerPkmn(struct details entry[], int *storedEntries, int* addOnC
                     }
                     else{
                         updatePokemon--;
-                        printf("%s: ", researchAddOns[2]);
-                        scanf("%d", &addTask); printf("\n");
+                        do{
+                            printf("%s: ", researchAddOns[2]);
+                            scanf("%d", &addTask); 
+                            printf("\n");
+                            if(addTask < 0){
+                                printf(RED "Error: Invalid Entry! Try Again\n" RESET);
+                            }
+                        }while(addTask < 0);
                         entry[updatePokemon].researchTasks[2].researchCount += addTask;
                     }
                     break;
@@ -1252,8 +1268,14 @@ void updateAddOnsPerPkmn(struct details entry[], int *storedEntries, int* addOnC
                     {
                         updatePokemon--;
                         printf("%s: ", researchAddOns[3]);
-                        scanf("%d", &addTask); 
-                        printf("\n");
+                        do{
+                            printf("%s: ", researchAddOns[3]);
+                            scanf("%d", &addTask); 
+                            printf("\n");
+                            if(addTask < 0){
+                                printf(RED "Error: Invalid Entry! Try Again\n" RESET);
+                            }
+                        }while(addTask < 0);
                         entry[updatePokemon].researchTasks[3].researchCount += addTask;
                     }
                     break;
@@ -1270,8 +1292,14 @@ void updateAddOnsPerPkmn(struct details entry[], int *storedEntries, int* addOnC
                     else
                     {
                         updatePokemon--;
-                        printf("%s: ", researchAddOns[4]);
-                        scanf("%d", &addTask); printf("\n");
+                        do{
+                            printf("%s: ", researchAddOns[4]);
+                            scanf("%d", &addTask); 
+                            printf("\n");
+                            if(addTask < 0){
+                                printf(RED "Error: Invalid Entry! Try Again\n" RESET);
+                            }
+                        }while(addTask < 0);
                         entry[updatePokemon].researchTasks[4].researchCount += addTask;
                     }
                     break;
