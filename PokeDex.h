@@ -19,6 +19,7 @@ TORIO, Ysobella, DLSU ID# 12172030
 #define CYAN "\033[0;36m"
 #define GREEN "\033[0;32m"
 #define RED "\033[1;31m"
+#define GREY "\033[30m"
 #define RESET "\033[0m"
 
 /* Maximum Number of Entries */
@@ -44,6 +45,7 @@ struct details
 /* Functions for Interaction */
 void KeyContinue();
 void printPokeBall();
+void printPikachu();
 
 /* Functions under Manage Data */
 void addEntry();
@@ -80,7 +82,7 @@ void KeyContinue()
 	system("cls");
 } 
 
-/* Functio that prints a PokeBall */
+/* Function that prints a PokeBall */
 void printPokeBall()
 {
     printf("```````````````````````````````````````````````\n");
@@ -103,6 +105,23 @@ void printPokeBall()
     printf("``````````$    @@@@@@@@@@@@@@@@@    &``````````\n");
     printf("```````````````                ,```````````````\n");
     printf("```````````````````````````````````````````````\n\n");
+}
+
+/* Function that prints Pikachu */
+void printPikachu()
+{
+    printf(GREY"*******"RESET"```````````````````````````````````&"CYAN",,,,,,\n");
+    printf(GREY"************"RESET"`````````````````````````&"CYAN",,,,,,,,,,,\n");
+    printf(GREY"#*******$$$$***"RESET"````````````````````"GREEN",,,"YELLOW"$$$$"CYAN",,,,,,,\n");
+    printf("`"GREY"******$$$$$$$,*******/#"YELLOW"$$"GREY"#/,,,,,,,,"YELLOW"$$$$$$$"CYAN",,,,,"GREY"*\n");
+    printf("``****$$$$"YELLOW"$$#**$$$$$$$$$$$$$$$$$$$$"GREY"*,"YELLOW"#$$$$$#"GREEN",,,.`\n");
+    printf(GREY"````**/$$**$$$$$$"YELLOW"$$$$$$$$$$$$$$$$$$$$$#,,$$*,,"RESET"```\n");
+    printf("``````"GREY"/***#$$$$$"YELLOW"$$$$$$$$$$$$$$$$$$$$$$$#,,,/"RESET"`````\n");
+    printf("```````"GREY"**#$$$$$"YELLOW"$$$$$$$$$$$$$$$$$$$$$$$$$(,,"RESET"``````\n");
+    printf("``````"GREY"#**$$$$$$"YELLOW"#$$$$$$$$$$$$$$$$$#($$$$$$,,&"RESET"`````\n");
+    printf("``````"GREY"**$$$$(*,/"RESET"@"GREY"$*"YELLOW"$$$$$$$$$$$$"GREY",#"RESET"@"GREY"(,,#"YELLOW"$$$$,,"RESET"`````\n");
+    printf("``````"GREY"**$$$$"YELLOW"$"GREY",,,,,"YELLOW"$$$$$$$$$$$$$$"GREEN",,,"CYAN",,"YELLOW"$$$$$,,"RESET"`````\n");
+    printf("`````"GREY"**$$$"YELLOW"$$$$$$$$$$$$$,,,,$$$$$$$$$$$$$$$$,,````\n");
 }
 
 /*  manageData Function contains all options for managing and accessing pokemon entries  

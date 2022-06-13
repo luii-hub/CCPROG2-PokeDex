@@ -77,13 +77,16 @@ int main()
             /* Terminate Program */
             case 'e':
                 system("cls");
-                printf(CYAN"Closing the PokeDex in 3\n");
+                printPikachu();
+                printf(CYAN"\nClosing the PokeDex in 3\n");
                 sleep(1);
                 system("cls");
-                printf(YELLOW"Closing the PokeDex in 2\n");
+                printPikachu();
+                printf(YELLOW"\nClosing the PokeDex in 2\n");
                 sleep(1);
                 system("cls");
-                printf(RED"Closing the PokeDex in 1\n"RESET);
+                printPikachu();
+                printf(RED"\nClosing the PokeDex in 1\n"RESET);
                 sleep(1);
                 system("cls");
                 return 0;
