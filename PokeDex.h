@@ -43,7 +43,7 @@ struct details
 
 /* Functions for Interaction */
 void KeyContinue();
-void PokeBall();
+void printPokeBall();
 
 /* Functions under Manage Data */
 void addEntry();
@@ -81,7 +81,8 @@ void KeyContinue()
 } 
 
 /* Functio that prints a PokeBall */
-void PokeBall(){
+void printPokeBall()
+{
     printf("```````````````````````````````````````````````\n");
     printf("``````````````````          ,``````````````````\n");
     printf("````````````     "RED"*************"RESET"     ````````````\n");
@@ -539,7 +540,7 @@ void deleteSubstring(char string[], char substr[])
 */
 void importFile(struct details entry[], int *storedEntries)
 {
-    char tempName[21], tempType[21], tempDesc[51], tempSpace; // temporary storage of the entries imported
+    char tempName[27], tempType[27], tempDesc[64], tempSpace[64]; // temporary storage of the entries imported
     int entriesLeft = MAX - *storedEntries; // size left of entry[]
     int i; // for loop variable for searching for a duplicate entry
     char cInput; // user input when adding to the list of entries
@@ -578,7 +579,7 @@ void importFile(struct details entry[], int *storedEntries)
                 fgets(tempName, 27, (FILE*)fp);
                 fgets(tempType, 27, (FILE*)fp);
                 fgets(tempDesc, 64, (FILE*)fp);
-                fscanf(fp, " %c", tempSpace);
+                fgets(tempSpace, 64, (FILE*)fp);
 
                 entryCtr++;
             

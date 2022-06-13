@@ -22,7 +22,7 @@ int main()
     system("cls");
 
     //Greet Trainer
-    PokeBall();
+    printPokeBall();
     KeyContinue();
     printf("Accessing data...   "YELLOW"(3)"RESET"\n");
     sleep(1);
