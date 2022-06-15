@@ -14,6 +14,7 @@ TORIO, Ysobella, DLSU ID# 12172030
 #include <conio.h> 
 #include <windows.h> 
 #include <unistd.h> 
+#include <stdbool.h> 
 #include "RANA_TORIOheader.h"
 
 /* --- Main Function --- */
@@ -38,7 +39,7 @@ int main()
     struct details entry[MAX];
     for(int i = 0; i < MAX; i++)
     {
-        entry[i].defeated = 0;
+        entry[i].seen = 0;
         entry[i].defeated = 0;
     }
     char ResearchAddOns[5][21];

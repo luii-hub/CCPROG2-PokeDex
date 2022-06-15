@@ -441,17 +441,88 @@ void deleteEntry(struct details entry[], int *storedEntries)
 */
 void displayAllEntries(struct details entry[], int* storedEntries){
     int i; // for loop variable for the position
-
-    if(*storedEntries == 0)
-    {
+    char cChoice, printallChoice; // user input variables
+    bool validChoice, printAll; // for validation
+    
+    if(*storedEntries == 0){
         printf(RED"No Existing Entries Found!\n"RESET);
     }else
     {
         printf("Number of Pokemon Entries: %d\n", *storedEntries);
         printf("Number of Pokemon Left: %d\n\n", 150 - *storedEntries);
-        for(i = 0; i < *storedEntries; i++)
-        {
-            printf("Entry Index: " RED "%d\n" RESET "Pokemon Name: " CYAN "%s\n" RESET "Pokemon Type: " GREEN "%s\n" RESET "Description: " YELLOW "%s\n\n" RESET, (i+1), entry[i].name20, entry[i].type20, entry[i].description50);
+
+        if(*storedEntries <= 3){
+            printAll = true;
+        }
+        else{
+            do{
+                printf("Do you wish to Print All Entries?\n"GREEN"[Y]"RESET"es  "GREEN"[N]"RESET"o\n");
+                scanf(" %c", &printallChoice);
+                printallChoice = toupper(printallChoice);
+            }while(printallChoice != 'Y' && printallChoice != 'N');
+        }
+
+        switch(printallChoice){
+            case 'Y': printAll = true; break;
+            case 'N': printAll = false; break;
+        }
+        if(printAll == true){
+            for(i = 0; i < *storedEntries; i++)
+            {
+                printf("Entry Index: " RED "%d\n" RESET "Pokemon Name: " CYAN "%s\n" RESET "Pokemon Type: " GREEN "%s\n" RESET "Description: " YELLOW "%s\n\n" RESET, (i+1), entry[i].name20, entry[i].type20, entry[i].description50);
+            }
+        }
+        else{
+
+            if(*storedEntries >= 4){
+                for(i = 0; i < *storedEntries; i++)
+                {   
+                    printf("Entry Index: " RED "%d\n" RESET "Pokemon Name: " CYAN "%s\n" RESET "Pokemon Type: " GREEN "%s\n" RESET "Description: " YELLOW "%s\n" RESET, (i+1), entry[i].name20, entry[i].type20, entry[i].description50);
+                    do{
+                        do{
+                            printf("\n[P]revious Entry | [N]ext Entry | [D]one\nConsole: ");
+                            scanf(" %c", &cChoice);
+                            cChoice = toupper(cChoice);
+                            //printf("ValidChoice: %d\n", validChoice);
+                            if(cChoice == 'P' && i <= 0){
+                                printf(RED"Invalid Input!" RESET);
+                                validChoice = false;
+                            }
+                            else if(i == 149 && cChoice == 'N'){
+                                printf(RED"Invalid Input!" RESET);
+                                validChoice = false;
+                            }
+                            else if(cChoice != 'P' && cChoice != 'N' && cChoice != 'D'){
+                                printf(RED"Invalid Input!" RESET);
+                                validChoice = false;
+                            }
+                            else{
+                                validChoice = true;
+                            }
+                            //printf("\nValidChoice: %d\n", validChoice);
+                        }while(!validChoice);
+
+                    }while(cChoice != 'P' && cChoice != 'N' && cChoice != 'D');
+
+                    switch (cChoice)
+                    {
+                    case 'P':
+                        if (i != 0){
+                            i -= 2;
+                        }
+                        break;
+                    case 'N':
+                        //Move to Next Entry
+                        if (i+1 == *storedEntries){
+                            printf(YELLOW "You have reached the End of the List\n" RESET);
+                        }
+                        break;
+                    case 'D':
+                        i += 150;
+                        break;
+                    }
+                }
+            }
         }
     }
 }
@@ -847,7 +918,7 @@ void updateTask(struct details entry[], int *storedEntries){
 
         for(int i = 0; i < *storedEntries; i++)
         {
-            printf("(%d) %s\n", i+1, entry[i].name20);
+            printf(CYAN"(%d)"RESET" %s\n", i+1, entry[i].name20);
         }
 
         printf("\nSelect the Entry Number of the Pokemon that you wish to update Research Task:\n");
@@ -1145,7 +1216,7 @@ void showAdditionalTasks(struct details entry[], int *storedEntries, int* addOnC
             printf(YELLOW "Additional Task Types:\n" RESET);
             for(i = 0; i < *addOnCounter; i++)
             {
-                printf("(%d) %s\n", i+1, researchAddOns[i]);
+                printf(CYAN"(%d)"RESET" %s\n", i+1, researchAddOns[i]);
             }
         }
     }
@@ -1193,7 +1264,7 @@ void updateAddOnsPerPkmn(struct details entry[], int *storedEntries, int* addOnC
             printf(CYAN"Pokemon Entries:\n"RESET);
             for(int i = 0; i < *storedEntries; i++)
             {
-                printf("(%d) %s\n", i+1, entry[i].name20);
+                printf(CYAN"(%d)"RESET" %s\n", i+1, entry[i].name20);
             }
 
             switch(task)

@@ -1,0 +1,28 @@
+Name: Pikachu
+Type: Electric
+Description: Pokemon of Ash
+
+Name: Greninja
+Type: Water
+Description: Companion of Ash
+
+Name: Charizard
+Type: Fire
+Description: best friend
+
+Name: Meowth
+Type: Grass
+Description: Pokemon of Team Rocket
+
+Name: Charmander
+Type: Fire
+Description: first evolution
+
+Name: Shiny Zapdos
+Type: Electric
+Description: Super rare legendary Pokemon
+
+Name: Luis
+Type: Water
+Description: CS student 
+
