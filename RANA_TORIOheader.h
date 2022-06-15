@@ -391,7 +391,7 @@ void modifyEntry(struct details entry[], int* storedEntries){
 void deleteEntry(struct details entry[], int *storedEntries)
 {
     int index; // index of the entry to be deleted
-    int i; // while loop variable indicating the position
+    int i = 0; // while loop variable indicating the position
 
     if(*storedEntries == 0)
     {
@@ -405,7 +405,7 @@ void deleteEntry(struct details entry[], int *storedEntries)
             printf("Which Entry Index will be deleted: ");
             scanf("%d", &index);
         }
-        index--;
+        index -= 1;
 
         /*---- locating the position of i in the array -------*/
         while(i != index)
