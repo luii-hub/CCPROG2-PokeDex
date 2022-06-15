@@ -319,7 +319,7 @@ void modifyEntry(struct details entry[], int* storedEntries){
         
         if(modifyIndex <= 0 || modifyIndex > *storedEntries)
         {
-            printf(RED"Invalid Entry! Returning back to Manage Data Menu...\n\n"RESET);
+            printf(RED"Invalid Entry! Returning to Manage Data Menu...\n\n"RESET);
         }
         else
         {
@@ -412,7 +412,7 @@ void deleteEntry(struct details entry[], int *storedEntries)
 
         if(index <= 0 || index > *storedEntries)
         {
-            printf(RED"Invalid Entry! Redirecting back to Manage Data Menu...\n\n"RESET);
+            printf(RED"Invalid Entry! Returning to Manage Data Menu...\n\n"RESET);
         }
         else
         {
