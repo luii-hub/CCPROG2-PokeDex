@@ -314,72 +314,78 @@ void modifyEntry(struct details entry[], int* storedEntries){
         displayAllEntries(entry, storedEntries);
 
         //Ask User Input
-        while(modifyIndex <= 0 || modifyIndex > *storedEntries)
-        {
-            printf("Which Entry would you wish modify: ");
-            scanf(" %d", &modifyIndex); printf("\n");
-        }
-        modifyIndex--;
+        printf("Which Entry do you wish to modify?: ");
+        scanf(" %d", &modifyIndex); printf("\n");
         
-        do
+        if(modifyIndex <= 0 || modifyIndex > *storedEntries)
         {
-            printf("Which Category would you wish to modify:\n"CYAN"[1]"RESET" Pokemon Name\n"CYAN"[2]"RESET" Pokemon Type\n"CYAN"[3]"RESET" Pokemon Description\n\nConsole: ");
-            scanf("%d", &category); 
-            printf("\n");
-        }while(category <= 0 || category > 3);
- 
-        while(i <= *storedEntries)
+            printf(RED"Invalid Entry! Returning back to Manage Data Menu...\n\n"RESET);
+        }
+        else
         {
-            if(modifyIndex == i)
+            modifyIndex--;
+            
+            do
             {
-                /* Modify Pokemon Name */
-                if(category == 1)
+                printf("Which Category do you wish to modify?:\n"CYAN"[1]"RESET" Pokemon Name\n"CYAN"[2]"RESET" Pokemon Type\n"CYAN"[3]"RESET" Pokemon Description\n\nConsole: ");
+                scanf("%d", &category); 
+                printf("\n");
+            }while(category <= 0 || category > 3);
+    
+            while(i <= *storedEntries)
+            {
+                if(modifyIndex == i)
                 {
-                    do
+                    /* Modify Pokemon Name */
+                    if(category == 1)
                     {
-                        printf(YELLOW"Note: Pokemon Name must not exceed more than 20 Characters!\n\n"RESET"New Pokemon Name: ");
-                        scanf(" %[^\n]s", modify20); printf("\n");
-                        strcpy(entry[i].name20, modify20);
-                        if(strlen(entry[i].name20) > 20)
+                        do
                         {
-                            printf(RED "Error: Pokemon Type must not exceed 20 Characters\n" RESET);
+                            printf(YELLOW"Note: Pokemon Name must not exceed more than 20 Characters!\n\n"RESET"New Pokemon Name: ");
+                            scanf(" %[^\n]s", modify20); printf("\n");
+                            strcpy(entry[i].name20, modify20);
+                            if(strlen(entry[i].name20) > 20)
+                            {
+                                printf(RED "Error: Pokemon Type must not exceed 20 Characters\n" RESET);
+                            }
+                        }while(strlen(entry[i].name20) > 20);
+                    }
+                    /* Modify Pokemon Type */
+                    else if(category == 2)
+                    {
+                        do
+                        {
+                            printf("Selection: " RED"[F]ire "RESET CYAN"[W]ater "RESET GREEN"[G]rass "RESET YELLOW"[E]lectic\n"RESET);
+                            printf(YELLOW "Pokemon Type: " RESET);
+                            scanf(" %c", &type);
+                            type = toupper(type);
+                        }while(type != 'F' && type != 'W' && type != 'G' && type != 'E' );
+                        switch(type)
+                        {
+                            case 'F':  strcpy(entry[i].type20, "Fire"); break;
+                            case 'W':  strcpy(entry[i].type20, "Water"); break;
+                            case 'G':  strcpy(entry[i].type20, "Grass"); break;
+                            case 'E':  strcpy(entry[i].type20, "Electric"); break;
                         }
-                    }while(strlen(entry[i].name20) > 20);
-                }
-                /* Modify Pokemon Type */
-                else if(category == 2)
-                {
-                    do
+                    }
+                    /* Modify Pokemon Description */
+                    else if(category == 3)
                     {
-                        printf("Selection: " RED"[F]ire "RESET CYAN"[W]ater "RESET GREEN"[G]rass "RESET YELLOW"[E]lectic\n"RESET);
-                        printf(YELLOW "Pokemon Type: " RESET);
-                        scanf(" %c", &type);
-                        type = toupper(type);
-                    }while(type != 'F' && type != 'W' && type != 'G' && type != 'E' );
-                    switch(type)
-                    {
-                        case 'F':  strcpy(entry[i].type20, "Fire"); break;
-                        case 'W':  strcpy(entry[i].type20, "Water"); break;
-                        case 'G':  strcpy(entry[i].type20, "Grass"); break;
-                        case 'E':  strcpy(entry[i].type20, "Electric"); break;
+                        do
+                        {
+                            printf(YELLOW"Note: Pokemon Description must not exceed more than 50 Characters!\n\n"RESET"New Pokemon Description: ");
+                            scanf(" %[^\n]s", modify50); printf("\n");
+                            strcpy(entry[i].description50, modify50);
+                            if(strlen(entry[i].description50) > 20)
+                            {
+                                printf(RED "Error: Pokemon Type must not exceed 50 Characters\n" RESET);
+                            }
+                        }while(strlen(entry[i].description50) > 50);
                     }
                 }
-                /* Modify Pokemon Description */
-                else if(category == 3)
-                {
-                    do
-                    {
-                        printf(YELLOW"Note: Pokemon Description must not exceed more than 50 Characters!\n\n"RESET"New Pokemon Description: ");
-                        scanf(" %[^\n]s", modify50); printf("\n");
-                        strcpy(entry[i].description50, modify50);
-                        if(strlen(entry[i].description50) > 20)
-                        {
-                            printf(RED "Error: Pokemon Type must not exceed 50 Characters\n" RESET);
-                        }
-                    }while(strlen(entry[i].description50) > 50);
-                }
+                i++;
             }
-            i++;
+
         }
     }
 }
@@ -400,25 +406,32 @@ void deleteEntry(struct details entry[], int *storedEntries)
     else
     {
         displayAllEntries(entry, storedEntries);
-        while(index <= 0 || index > *storedEntries)
-        {
-            printf("Which Entry Index will be deleted: ");
-            scanf("%d", &index);
-        }
-        index -= 1;
 
-        /*---- locating the position of i in the array -------*/
-        while(i != index)
+        printf("Which Entry do you want to delete?: ");
+        scanf("%d", &index);
+
+        if(index <= 0 || index > *storedEntries)
         {
-            i++;
+            printf(RED"Invalid Entry! Redirecting back to Manage Data Menu...\n\n"RESET);
         }
-        /*---- the position of i in the array will be replaced by the value of its right */
-        while(i < *storedEntries)
+        else
         {
-            entry[i] = entry[i + 1];
-            i++;
+            index -= 1;
+
+            /*---- locating the position of i in the array -------*/
+            while(i != index)
+            {
+                i++;
+            }
+            /*---- the position of i in the array will be replaced by the value of its right */
+            while(i < *storedEntries)
+            {
+                entry[i] = entry[i + 1];
+                i++;
+            }
+            *storedEntries -= 1;
         }
-        *storedEntries -= 1;
+
     }
 }
 
